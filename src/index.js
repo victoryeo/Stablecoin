@@ -397,7 +397,7 @@ const stABI =[
     "type": "function"
   }
 ]
-const stAddr = "0xCfEB869F69431e42cdB54A4F4f105C19C080A601"
+const stAddr = "0x9561C133DD8580860B6b7E504bC5Aa500f0f06a7"
 
 let stInst = new web3.eth.Contract(
   stABI, stAddr
@@ -409,11 +409,16 @@ const do_rebase = async (latest_price, base_price) => {
   console.log(latest_price, base_price)
   const totalSupply = await stInst.methods.totalSupply().call()
   console.log(totalSupply)
+  let accounts = await web3.eth.getAccounts()
 
   if (latest_price > base_price) {
     // market price above the base price
     const diff = (latest_price - base_price)/ base_price
-
+    const tokenToBeAdded = Math.trunc(diff * totalSupply)
+    console.log(tokenToBeAdded)
+    await stInst.methods.mint(accounts[0],tokenToBeAdded).send({from: accounts[0]})
+    const totalSupplyNew = await stInst.methods.totalSupply().call()
+    console.log(totalSupplyNew)  
   } else {
     // market price below the base price
     const diff = (base_price -latest_price)/ base_price
