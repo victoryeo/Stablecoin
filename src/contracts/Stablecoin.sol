@@ -9,7 +9,7 @@ contract Stablecoin is ERC20, Ownable {
   uint public INITIAL_SUPPLY = 1000000;
 
   constructor() ERC20("StablecoinToken", "ST") {
-    _mint(msg.sender, INITIAL_SUPPLY * 10 ** decimals());
+    _mint(msg.sender, INITIAL_SUPPLY);
   }
 
   function mint(address to, uint256 amount) public onlyOwner {
