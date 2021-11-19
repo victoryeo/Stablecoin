@@ -397,6 +397,7 @@ const stABI =[
     "type": "function"
   }
 ]
+// stablecoin contract address
 const stAddr = "0x9561C133DD8580860B6b7E504bC5Aa500f0f06a7"
 
 let stInst = new web3.eth.Contract(
@@ -422,7 +423,11 @@ const do_rebase = async (latest_price, base_price) => {
   } else {
     // market price below the base price
     const diff = (base_price -latest_price)/ base_price
-
+    const tokenToBeBurnt = Math.trunc(diff * totalSupply)
+    console.log(tokenToBeBurnt)
+    await stInst.methods.burn(accounts[0],tokenToBeBurnt).send({from: accounts[0]})
+    const totalSupplyNew = await stInst.methods.totalSupply().call()
+    console.log(totalSupplyNew)  
   }
 }
 
